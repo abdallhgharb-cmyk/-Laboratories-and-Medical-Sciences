@@ -1,0 +1,6 @@
+{
+  "name": "المختبرات والعلوم الطبية - د/ عبدالله غارب",
+  "description": "برنامج تقييم وتطوير كفاءة علمية وتأهيل لامتحانات المزاولة والبرومتريك والبورد الطبي والمخبري - إشراف د/ عبدالله غارب",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

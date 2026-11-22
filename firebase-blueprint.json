@@ -1,0 +1,233 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Authenticated student profile and overall clinical readiness summary synced to Firestore.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the signed-in student."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Google account display name."
+        },
+        "email": {
+          "type": "string",
+          "description": "Google account email address."
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "Optional Google profile photo URL."
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Applicant profile full name for licensing certificate."
+        },
+        "degreeType": {
+          "type": "string",
+          "description": "Academic degree title from applicant profile."
+        },
+        "specialty": {
+          "type": "string",
+          "description": "Medical specialty from applicant profile."
+        },
+        "totalScore": {
+          "type": "integer",
+          "description": "Aggregated assessment score across all tracks."
+        },
+        "totalCorrect": {
+          "type": "integer",
+          "description": "Total distinct questions answered correctly."
+        },
+        "totalAnswered": {
+          "type": "integer",
+          "description": "Total distinct questions answered."
+        },
+        "masteredTopicsCount": {
+          "type": "integer",
+          "description": "Number of clinical topics meeting mastery threshold."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp updated via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "email",
+        "fullName",
+        "degreeType",
+        "specialty",
+        "totalScore",
+        "totalCorrect",
+        "totalAnswered",
+        "masteredTopicsCount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CloudProgress": {
+      "title": "CloudProgress",
+      "description": "Per-specialty and per-degree exam progress synced from local Room user_progress table.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owning student."
+        },
+        "specialtyId": {
+          "type": "string",
+          "enum": ["MED_LAB", "NURSING", "PHYSICIAN_ASSISTANT"],
+          "description": "Clinical specialty identifier."
+        },
+        "academicDegree": {
+          "type": "string",
+          "enum": ["DIPLOMA", "BACHELOR", "MASTER"],
+          "description": "Academic degree track."
+        },
+        "highestUnlockedStage": {
+          "type": "integer",
+          "description": "Highest unlocked level between 1 and 10."
+        },
+        "completedStagesCount": {
+          "type": "integer",
+          "description": "Count of completed stages between 0 and 10."
+        },
+        "totalScore": {
+          "type": "integer",
+          "description": "Score accumulated in this specialty/degree track."
+        },
+        "totalCorrectAnswers": {
+          "type": "integer",
+          "description": "Correct answers in this track."
+        },
+        "totalQuestionsAnswered": {
+          "type": "integer",
+          "description": "Total questions answered in this track."
+        },
+        "professionalRankEn": {
+          "type": "string",
+          "description": "English clinical rank label."
+        },
+        "professionalRankAr": {
+          "type": "string",
+          "description": "Arabic clinical rank label."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp updated via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "specialtyId",
+        "academicDegree",
+        "highestUnlockedStage",
+        "completedStagesCount",
+        "totalScore",
+        "totalCorrectAnswers",
+        "totalQuestionsAnswered",
+        "professionalRankEn",
+        "professionalRankAr",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CloudNote": {
+      "title": "CloudNote",
+      "description": "Student clinical study note (either linked to a questionId or standalone notebook note).",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owning student."
+        },
+        "localNoteId": {
+          "type": "integer",
+          "description": "Room local primary key identifier for merge reconciliation."
+        },
+        "questionId": {
+          "type": "integer",
+          "description": "Optional linked exam question ID."
+        },
+        "specialtyId": {
+          "type": "string",
+          "enum": ["MED_LAB", "NURSING", "PHYSICIAN_ASSISTANT", "GENERAL"],
+          "description": "Clinical specialty or GENERAL."
+        },
+        "topic": {
+          "type": "string",
+          "description": "Clinical sub-category or study topic."
+        },
+        "title": {
+          "type": "string",
+          "description": "Note title."
+        },
+        "content": {
+          "type": "string",
+          "description": "Student study note body."
+        },
+        "clientUpdatedAtMs": {
+          "type": "integer",
+          "description": "Epoch millis of latest local edit for offline merge resolution."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp set via FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp updated via FieldValue.serverTimestamp()."
+        }
+      },
+      "required": [
+        "userId",
+        "localNoteId",
+        "specialtyId",
+        "topic",
+        "title",
+        "content",
+        "clientUpdatedAtMs",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserAccount"
+      },
+      "description": "Authenticated student profile and global progress summary."
+    },
+    "/users/{userId}/progress/{progressId}": {
+      "schema": {
+        "$ref": "#/entities/CloudProgress"
+      },
+      "description": "Per-specialty and per-degree exam progress records owned by the user."
+    },
+    "/users/{userId}/notes/{noteId}": {
+      "schema": {
+        "$ref": "#/entities/CloudNote"
+      },
+      "description": "Student study notes (question-linked and standalone) owned by the user."
+    }
+  }
+}

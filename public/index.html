@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>المختبرات والعلوم الطبية - د/ عبدالله غارب | بوابة التحميل والمشروع</title>
+  <style>
+    :root {
+      --primary: #1565c0;
+      --primary-dark: #0d3b66;
+      --teal: #00796b;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      padding: 36px 20px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 1.8rem; }
+    header p { margin: 0; opacity: 0.92; font-size: 0.98rem; }
+    .badge {
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.16);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    main {
+      max-width: 960px;
+      margin: 28px auto;
+      padding: 0 16px 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      color: var(--primary-dark);
+    }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+    .btn.teal { background: var(--teal); }
+    .btn.dark { background: var(--primary-dark); }
+    .meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 8px;
+      word-break: break-all;
+    }
+    ul { padding-right: 20px; margin: 10px 0; }
+    li { margin-bottom: 6px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: right;
+    }
+    th { color: var(--primary-dark); }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      direction: ltr;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>المختبرات والعلوم الطبية - د/ عبدالله غارب</h1>
+    <p>الإصدار v1.2 (<code>versionCode 3</code>) • يعمل بالكامل بدون إنترنت (Offline-First) مع 10,070 سؤالاً علمياً</p>
+    <span class="badge">Room SQLite v10 • English Primary + Offline Arabic Cache • AAB &amp; APK Signed</span>
+  </header>
+
+  <main>
+    <section class="grid">
+      <div class="card">
+        <h2>حزمة متجر Google Play (.aab)</h2>
+        <p>حزمة التطبيق الموقّعة بالضغط الديناميكي (R8 + Resource Shrinking + WebP Atlas).</p>
+        <div class="meta">الحجم: 14 MB • SHA-256:<br /><code>e5f606533b87fd0fefcdb5fea0cdf9c752095a11a4aa1741b6ba5be212d96b2e</code></div>
+        <a class="btn" href="downloads/app-release.aab" download>تحميل app-release.aab</a>
+      </div>
+
+      <div class="card">
+        <h2>ملف التثبيت المباشر (.apk)</h2>
+        <p>ملف APK موقّع v1/v2/v3 ومحاذى لصفحات 16KB للأجهزة الحديثة ويحتوي كافة قواعد البيانات.</p>
+        <div class="meta">الحجم: 9.3 MB • SHA-256:<br /><code>047ef036445931adebdaa8f2af1be881c832a75e0a5134164af17192d2bc010f</code></div>
+        <a class="btn teal" href="downloads/app-release.apk" download>تحميل app-release.apk</a>
+      </div>
+
+      <div class="card">
+        <h2>الكود المصدري للمشروع (.zip)</h2>
+        <p>حزمة الكود المصدري الكاملة للمشروع مع قواعد البيانات والأصول (بدون مفاتيح سرية).</p>
+        <div class="meta">الحجم: 37 MB • SHA-256:<br /><code>79a7cb509ac5243d89b2af973d51951197d82da1d32c29dd7399436957c517a3</code></div>
+        <a class="btn dark" href="downloads/medical-board-project-source.zip" download>تحميل Project Source ZIP</a>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom: 24px;">
+      <h2>توزيع بنك الأسئلة (10,070 سؤالاً فريداً بدون تكرار)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>القسم / التخصص</th>
+            <th>المستويات</th>
+            <th>عدد الأسئلة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>المختبرات والعلوم الطبية (<code>MED_LAB</code>)</td>
+            <td>دبلوم (1,014) • بكالوريوس (1,008) • ماجستير (500) • استشاري (500)</td>
+            <td>3,022</td>
+          </tr>
+          <tr>
+            <td>امتحان مزاولة المهنة - المختبرات (<code>MED_LAB_LICENSING</code>)</td>
+            <td>9 مراحل تخصصية (إنجليزي أساسي + ترجمة عربية مخزنة محلياً)</td>
+            <td>530</td>
+          </tr>
+          <tr>
+            <td>علوم التمريض والرعاية الحرجة (<code>NURSING</code>)</td>
+            <td>دبلوم (1,170) • بكالوريوس (1,170) • ماجستير (1,170)</td>
+            <td>3,510</td>
+          </tr>
+          <tr>
+            <td>مساعد الطبيب والطب العام (<code>PHYSICIAN_ASSISTANT</code>)</td>
+            <td>دبلوم (1,002) • بكالوريوس (1,003) • ماجستير (1,003)</td>
+            <td>3,008</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>أبرز التحسينات المنجزة والتحقق من الحجم</h2>
+      <ul>
+        <li>محرك بحث طبي ثنائي اللغة (EN / AR) يعمل محلياً داخل Room مع فلاتر الأقسام.</li>
+        <li>شريط تقدم حقيقي (<code>LinearProgressIndicator</code>) مرتبط بنشاط التقييم، محاكاة برومترك، والبطاقات التعليمية.</li>
+        <li>ترقية قاعدة البيانات إلى Room v10 (<code>MIGRATION_9_10</code>) مع الحفاظ الكامل على الأسئلة والتقدم والملاحظات السابقة.</li>
+        <li>عشوائية مستقلة لترتيب الخيارات (A-D) في كل سؤال وجلسة مع الحفاظ التام على التحقق والترجمات والوسائل المساعدة.</li>
+        <li>توحيد شرط فتح المرحلة التالية عند تحقيق 70% فأعلى مع منح نجمتين ★ ★ (و3 نجوم عند 90% فأعلى).</li>
+        <li>تخزين الـ 10,070 سؤالاً باللغة الإنجليزية كلغة علمية أصلية مع 1,030 ترجمة عربية محلية تعمل بدون إنترنت، وتصحيح Firebase App Check مع <code>RecaptchaAppCheckProviderFactory</code>.</li>
+        <li>سبب الحجم الصغير الصحيح (9.3 MB للـ APK و14 MB للـ AAB): ضغط قاعدة بيانات SQLite (12.3 MB مضغوطة إلى 0.66 MB في ZIP بنسبة 95%)، تحويل صور الأطلس الـ 13 إلى WebP (465 KB) مع ذاكرة تخزين Coil، وتقليص الشيفرة عبر R8 Full Mode.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

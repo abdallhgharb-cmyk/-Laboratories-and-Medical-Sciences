@@ -1,0 +1,186 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidUserAccount(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.displayName is string && data.displayName.size() <= 100 &&
+             data.email is string && data.email.size() <= 150 &&
+             (!('photoUrl' in data) || (data.photoUrl is string && data.photoUrl.size() <= 500)) &&
+             data.fullName is string && data.fullName.size() <= 120 &&
+             data.degreeType is string && data.degreeType.size() <= 40 &&
+             data.specialty is string && data.specialty.size() <= 60 &&
+             data.totalScore is int && data.totalScore >= 0 &&
+             data.totalCorrect is int && data.totalCorrect >= 0 &&
+             data.totalAnswered is int && data.totalAnswered >= 0 &&
+             data.masteredTopicsCount is int && data.masteredTopicsCount >= 0 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidCloudProgress(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.specialtyId in ['MED_LAB', 'MED_LAB_LICENSING', 'NURSING', 'PHYSICIAN_ASSISTANT'] &&
+             data.academicDegree in ['DIPLOMA', 'BACHELOR', 'MASTER'] &&
+             data.highestUnlockedStage is int && data.highestUnlockedStage >= 1 && data.highestUnlockedStage <= 10 &&
+             data.completedStagesCount is int && data.completedStagesCount >= 0 && data.completedStagesCount <= 10 &&
+             data.totalScore is int && data.totalScore >= 0 &&
+             data.totalCorrectAnswers is int && data.totalCorrectAnswers >= 0 &&
+             data.totalQuestionsAnswered is int && data.totalQuestionsAnswered >= 0 &&
+             data.professionalRankEn is string && data.professionalRankEn.size() <= 100 &&
+             data.professionalRankAr is string && data.professionalRankAr.size() <= 100 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidCloudNote(data, userId) {
+      return data.userId is string &&
+             data.userId == userId &&
+             data.userId == request.auth.uid &&
+             data.localNoteId is int && data.localNoteId >= 0 &&
+             (!('questionId' in data) || (data.questionId is int && data.questionId > 0)) &&
+             data.specialtyId in ['MED_LAB', 'MED_LAB_LICENSING', 'NURSING', 'PHYSICIAN_ASSISTANT', 'GENERAL'] &&
+             data.topic is string && data.topic.size() >= 1 && data.topic.size() <= 120 &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 160 &&
+             data.content is string && data.content.size() >= 1 && data.content.size() <= 4000 &&
+             data.clientUpdatedAtMs is int && data.clientUpdatedAtMs >= 0 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().keys().hasAll([
+                         'userId', 'displayName', 'email', 'fullName',
+                         'degreeType', 'specialty', 'totalScore',
+                         'totalCorrect', 'totalAnswered', 'masteredTopicsCount',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'displayName', 'email', 'photoUrl',
+                         'fullName', 'degreeType', 'specialty', 'totalScore',
+                         'totalCorrect', 'totalAnswered', 'masteredTopicsCount',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidUserAccount(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidUserAccount(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'displayName', 'email', 'photoUrl', 'fullName',
+                         'degreeType', 'specialty', 'totalScore',
+                         'totalCorrect', 'totalAnswered', 'masteredTopicsCount',
+                         'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /progress/{progressId} {
+        allow get: if isOwner(userId) && isValidId(progressId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(progressId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'specialtyId', 'academicDegree',
+                           'highestUnlockedStage', 'completedStagesCount',
+                           'totalScore', 'totalCorrectAnswers', 'totalQuestionsAnswered',
+                           'professionalRankEn', 'professionalRankAr',
+                           'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'specialtyId', 'academicDegree',
+                           'highestUnlockedStage', 'completedStagesCount',
+                           'totalScore', 'totalCorrectAnswers', 'totalQuestionsAnswered',
+                           'professionalRankEn', 'professionalRankAr',
+                           'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidCloudProgress(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(progressId) &&
+                         isValidCloudProgress(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().specialtyId == existing().specialtyId &&
+                         incoming().academicDegree == existing().academicDegree &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'highestUnlockedStage', 'completedStagesCount',
+                           'totalScore', 'totalCorrectAnswers', 'totalQuestionsAnswered',
+                           'professionalRankEn', 'professionalRankAr', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(progressId);
+      }
+
+      match /notes/{noteId} {
+        allow get: if isOwner(userId) && isValidId(noteId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(noteId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'localNoteId', 'specialtyId',
+                           'topic', 'title', 'content',
+                           'clientUpdatedAtMs', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'localNoteId', 'questionId', 'specialtyId',
+                           'topic', 'title', 'content',
+                           'clientUpdatedAtMs', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidCloudNote(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(noteId) &&
+                         isValidCloudNote(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'localNoteId', 'questionId', 'specialtyId',
+                           'topic', 'title', 'content',
+                           'clientUpdatedAtMs', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(noteId);
+      }
+    }
+  }
+}
